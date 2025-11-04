@@ -55,9 +55,10 @@ bool joystickRead(EventGroupHandle_t* ppEventHandler)
     return blReturn;
 }
 
-//****************************.audioManagerTask.********************************
+//***************************.joysticksetEvents.********************************
 // Purpose : Read joystick input and send to the system manager. 
-// Inputs  : None
+// Inputs  : pstJoystickData - poniter to struct contain joystick data.
+//           ppEventHandler - poniter to event handler.
 // Outputs : None
 // Return  : blReturn
 // Notes   : None

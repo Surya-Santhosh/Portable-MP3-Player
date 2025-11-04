@@ -49,7 +49,9 @@ bool displayInit()
 
 //***************************.displayPlayMode.**********************************
 // Purpose : Display the play mode screen.
-// Inputs  : none
+// Inputs  : ucdMode - Current mode.
+//           ucSelectedIndex - Selected index.
+//           psSongList - pointer to the songlist.
 // Outputs : none
 // Return  : blReturn
 // Notes   : None
@@ -124,7 +126,8 @@ bool displayPlayMode(uint8 ucdMode, uint8 ucSelectedIndex, String* psSongList)
 
 //**************************.displaySelectionMode.******************************
 // Purpose : Display the selection mode screen.
-// Inputs  : none
+// Inputs  : ucSelectedIndex - Selected index.
+//           psSongList - pointer to the songlist.
 // Outputs : none
 // Return  : blReturn
 // Notes   : None

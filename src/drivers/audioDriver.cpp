@@ -49,19 +49,21 @@ bool audioDriverInit()
 
 //****************************.audioManagerTask.********************************
 // Purpose : Read joystick input and send to the system manager. 
-// Inputs  : None
+// Inputs  : pstReceivedData - Pointer to the struct of received data.
+//           ppMqAudio - Ponter to the message queue handler.
+//           ppEventHandler - Ponter to the event handler.
 // Outputs : None
 // Return  : blReturn
 // Notes   : None
 //******************************************************************************
-bool audioDriverPlayRingtone(_CURRENT_DATA_ *pstReceivedData, 
-                             QueueHandle_t *pMqAudio, 
+bool audioDriverPlayRingtone(_CURRENT_DATA_* pstReceivedData, 
+                             QueueHandle_t* ppMqAudio, 
                              EventGroupHandle_t* ppEventHandler)
 {
     bool blReturn = false;
     _CURRENT_DATA_ sstNewReceivedData = {0};
 
-    if ((NULL != pstReceivedData) && (NULL != pMqAudio))
+    if ((NULL != pstReceivedData) && (NULL != ppMqAudio))
     {
         audioToSetup(pstReceivedData->psSongList, 
                                  pstReceivedData->ucSelectedIndex);
@@ -72,7 +74,7 @@ bool audioDriverPlayRingtone(_CURRENT_DATA_ *pstReceivedData,
         {
             sgcAudio.loop();
 
-            if (true == rtosInitMqueueReceive(pMqAudio,
+            if (true == rtosInitMqueueReceive(ppMqAudio,
                                               &sstNewReceivedData))
             {
                 // Pause button pressed, stop playback loop.
@@ -113,30 +115,31 @@ bool audioDriverPlayRingtone(_CURRENT_DATA_ *pstReceivedData,
 
 //****************************.audioManagerTask.********************************
 // Purpose : Read joystick input and send to the system manager. 
-// Inputs  : None
+// Inputs  : pSongList - pointer to an array of string.
+//           ucIndex - Index of current selected song.
 // Outputs : None
 // Return  : blReturn
 // Notes   : None
 //******************************************************************************
-static bool audioToSetup(String* psSongList, uint8 ucIndex)
+static bool audioToSetup(String* pSongList, uint8 ucIndex)
 {
     bool blReturn = false;
 
-    if (NULL != psSongList)
+    if (NULL != pSongList)
     {
-        String fileName = "/" + psSongList[ucIndex];
+        String fileName = "/" + pSongList[ucIndex];
 
         if (true != SPIFFS.exists(fileName.c_str())) 
         {
             Serial.println("MP3 file not found!");
         }
 
-        if (true != sgcAudio.connecttoFS(SPIFFS, psSongList[ucIndex].c_str())) 
+        if (true != sgcAudio.connecttoFS(SPIFFS, pSongList[ucIndex].c_str())) 
         {
             Serial.println("Failed to open");
         }
 
-        Serial.println(psSongList[ucIndex]);
+        Serial.println(pSongList[ucIndex]);
         blReturn = true;
     }
 

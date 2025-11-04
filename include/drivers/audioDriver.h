@@ -29,7 +29,7 @@ typedef signed short int16;
 bool audioDriverInit();
 bool audioDriverPlayRingtone(_CURRENT_DATA_ *pstReceivedData, 
                              QueueHandle_t *ppMqAudio, 
-                             EventGroupHandle_t* pEventHandler);
+                             EventGroupHandle_t* ppEventHandler);
 
 //************************ Inline Method Implementations *********************** 
 

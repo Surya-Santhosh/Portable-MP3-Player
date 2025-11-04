@@ -77,15 +77,7 @@ static bool rtosInitSemaphore()
     return true;
 }
 
-//***************************.freeRtosInitMQueue.*******************************
-// Purpose : To create message queue. 
-// Inputs  : None
-// Outputs : None
-// Return  : true
-// Notes   : None
-//******************************************************************************
-
-//*****************************.rtosInitAll.********************************
+//*******************************.rtosInitAll.**********************************
 // Purpose : Initialize task and semaphore. 
 // Inputs  : None
 // Outputs : None
@@ -209,7 +201,7 @@ bool rtosInitMqueueSend(QueueHandle_t* ppMqAudio, void* pvBuffer)
     return blReturn;
 }
 
-//****************************.rtosInitEvent.*******************************
+//******************************.rtosInitEvent.*********************************
 // Purpose : Create an event . 
 // Inputs  : ppEventHandler - pointer to event handler.
 // Outputs : None
@@ -233,7 +225,7 @@ bool rtosInitEvent(EventGroupHandle_t* ppEventHandler)
     return blReturn;
 }
 
-//***************************.rtosInitEventSet.*****************************
+//*****************************.rtosInitEventSet.*******************************
 // Purpose : Set bits within an event group. 
 // Inputs  : ppEventHandler - Pointer to event group in which the bits are to 
 //           be set.

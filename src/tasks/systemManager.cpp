@@ -17,7 +17,6 @@
 //******************************* Local Types **********************************
 
 //***************************** Local Constants ********************************
-// static _CURRENT_DATA_ sstCurrentData = {0};
 static uint8 sgucSelectedMode = SELECTION_MODE;
 
 //**************************** Local Variables *********************************
@@ -121,39 +120,39 @@ static bool systemManagerLoadFiles(String* psSongList)
 
 //****************************.taskAudioManager.********************************
 // Purpose : Handle joystick input when in Selection mode. 
-// Inputs  : sstCurrentData - Ponter to the struct contain selected index and 
+// Inputs  : pstCurrentData - Ponter to the struct contain selected index and 
 //           action.
 // Outputs : None
 // Return  : blReturn
 // Notes   : None
 //******************************************************************************
-static bool systemManagerSelectionMode(_CURRENT_DATA_* sstCurrentData, 
+static bool systemManagerSelectionMode(_CURRENT_DATA_* pstCurrentData, 
                                        EventGroupHandle_t* ppEventHandler)
 {
     bool blReturn = false;
 
-    if ((NULL != sstCurrentData) && (NULL != ppEventHandler))
+    if ((NULL != pstCurrentData) && (NULL != ppEventHandler))
     {
-        switch(sstCurrentData->ucAction)
+        switch(pstCurrentData->ucAction)
         {
             // Move up in list.
-            case EVENT_UP : sstCurrentData->ucSelectedIndex--;
+            case EVENT_UP : pstCurrentData->ucSelectedIndex--;
 
                             if (NUM_AUDIO_FILE <= 
-                                               sstCurrentData->ucSelectedIndex)
+                                               pstCurrentData->ucSelectedIndex)
                             {
-                                sstCurrentData->ucSelectedIndex = 
+                                pstCurrentData->ucSelectedIndex = 
                                                              NUM_AUDIO_FILE - 1;
                             }
                             break;
 
             // Move down in list.
-            case EVENT_DOWN : sstCurrentData->ucSelectedIndex++;
+            case EVENT_DOWN : pstCurrentData->ucSelectedIndex++;
 
                               if (NUM_AUDIO_FILE <= 
-                                               sstCurrentData->ucSelectedIndex)
+                                               pstCurrentData->ucSelectedIndex)
                               {
-                                sstCurrentData->ucSelectedIndex = 0;
+                                pstCurrentData->ucSelectedIndex = 0;
                               }
                               break;
 
@@ -170,20 +169,20 @@ static bool systemManagerSelectionMode(_CURRENT_DATA_* sstCurrentData,
 
 //****************************.taskAudioManager.********************************
 // Purpose : Handle joystick input when in Play mode. 
-// Inputs  : sstCurrentData - Ponter to the struct contain selected index and 
+// Inputs  : pstCurrentData - Ponter to the struct contain selected index and 
 //           action.
 // Outputs : None
 // Return  : blReturn
 // Notes   : None
 //******************************************************************************
-static bool systemManagerPlayMode(_CURRENT_DATA_ *sstCurrentData, 
+static bool systemManagerPlayMode(_CURRENT_DATA_* pstCurrentData, 
                                   EventGroupHandle_t* ppEventHandler)
 {
     bool blReturn = false;
 
-    if ((NULL != sstCurrentData) && (NULL != ppEventHandler))
+    if ((NULL != pstCurrentData) && (NULL != ppEventHandler))
     {
-        switch(sstCurrentData->ucAction)
+        switch(pstCurrentData->ucAction)
         {
             // Go back to file selection.
             case EVENT_UP : sgucSelectedMode = SELECTION_MODE;
@@ -193,24 +192,24 @@ static bool systemManagerPlayMode(_CURRENT_DATA_ *sstCurrentData,
                               break;
 
             // Next track.
-            case EVENT_RIGHT : sstCurrentData->ucSelectedIndex++;
+            case EVENT_RIGHT : pstCurrentData->ucSelectedIndex++;
                                sgucSelectedMode = PLAY_MODE;
 
                                if (NUM_AUDIO_FILE <= 
-                                               sstCurrentData->ucSelectedIndex)
+                                               pstCurrentData->ucSelectedIndex)
                                {
-                                sstCurrentData->ucSelectedIndex = 0;
+                                pstCurrentData->ucSelectedIndex = 0;
                                }
                                break;
             
             // Previous track.
-            case EVENT_LEFT : sstCurrentData->ucSelectedIndex--;
+            case EVENT_LEFT : pstCurrentData->ucSelectedIndex--;
                               sgucSelectedMode = PLAY_MODE;
 
                               if (NUM_AUDIO_FILE <= 
-                                               sstCurrentData->ucSelectedIndex)
+                                               pstCurrentData->ucSelectedIndex)
                               {
-                                sstCurrentData->ucSelectedIndex = 
+                                pstCurrentData->ucSelectedIndex = 
                                                              NUM_AUDIO_FILE - 1;
                               }
                               break;

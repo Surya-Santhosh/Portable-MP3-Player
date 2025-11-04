@@ -28,8 +28,7 @@ typedef signed short int16;
 
 //************************* Forward Declarations *******************************  
 bool displayInit();
-bool displayPlayMode(uint8 ucdMode, uint8 ucSelectedIndex, 
-                     String* psSongList);
+bool displayPlayMode(uint8 ucdMode, uint8 ucSelectedIndex, String* psSongList);
 bool displaySelectionMode(uint8 sgucSelectedIndex, String* psSongList);
 bool displayDrawRectangle(uint8 ucX, uint8 ucY, uint8 ucWidth, uint8 ucHeight);
 bool displayDrawTriangle(uint8 ucX0, uint8 ucY0, uint8 ucX1, uint8 ucY1, 

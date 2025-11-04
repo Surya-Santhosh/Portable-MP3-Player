@@ -36,9 +36,9 @@ bool rtosInitMqueueReceive(QueueHandle_t* ppMqAudio, void* pvBuffer);
 bool rtosInitMqueueSend(QueueHandle_t* ppMqAudio, void* pvBuffer);
 bool rtosInitEvent(EventGroupHandle_t* ppEventHandler);
 bool rtosInitEventSet(EventGroupHandle_t* ppEventHandler, 
-                      EventBits_t bitsToSet);
+                      EventBits_t eventBit);
 bool rtosInitEventWait(EventGroupHandle_t* ppEventHandler, 
-                       EventBits_t* bitsToWait);
+                       EventBits_t* eventBit);
 bool freeRtosInitMQueue(QueueHandle_t* ppMqHandle, uint16 unQueueLength, 
                         uint8 ucItemSize);
 
