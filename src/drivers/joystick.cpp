@@ -21,10 +21,10 @@
 //**************************** Local Variables *********************************
 
 //***************************** Local Functions ********************************
-static bool joysticksetEvents(_JOYSTICK_DATA_* pstJoystickData, 
+static bool joystickSetEvents(_JOYSTICK_DATA_* pstJoystickData, 
                               EventGroupHandle_t* ppEventHandler);
 
-//****************************.joysticksetEvents.*******************************
+//****************************.joystickSetEvents.*******************************
 // Purpose : Read joystick input, set events. 
 // Inputs  : ppEventHandler - poniter to event handler.
 // Outputs : None
@@ -44,9 +44,9 @@ bool joystickRead(EventGroupHandle_t* ppEventHandler)
         stJoystickData.ulYValue = analogRead(JOYSTICK_Y);
         stJoystickData.blSwitchState = digitalRead(JOYSTICK_SWITCH);
 
-        if (true != joysticksetEvents(&stJoystickData, ppEventHandler))
+        if (true != joystickSetEvents(&stJoystickData, ppEventHandler))
         {
-            Serial.println("joysticksetEvents failed");
+            Serial.println("joystickSetEvents failed");
         }
         
         blReturn = true;
@@ -55,7 +55,7 @@ bool joystickRead(EventGroupHandle_t* ppEventHandler)
     return blReturn;
 }
 
-//***************************.joysticksetEvents.********************************
+//***************************.joystickSetEvents.********************************
 // Purpose : Read joystick input and send to the system manager. 
 // Inputs  : pstJoystickData - poniter to struct contain joystick data.
 //           ppEventHandler - poniter to event handler.
@@ -63,7 +63,7 @@ bool joystickRead(EventGroupHandle_t* ppEventHandler)
 // Return  : blReturn
 // Notes   : None
 //******************************************************************************
-static bool joysticksetEvents(_JOYSTICK_DATA_* pstJoystickData, 
+static bool joystickSetEvents(_JOYSTICK_DATA_* pstJoystickData, 
                               EventGroupHandle_t* ppEventHandler)
 {
     bool blReturn = false;

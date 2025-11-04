@@ -21,6 +21,11 @@ Adafruit_SSD1306 gcdisplay(OLED_WIDTH, OLED_HEIGHT, &Wire, -1);
 //**************************** Local Variables *********************************
 
 //***************************** Local Functions ********************************
+static bool displayDrawRectangle(uint8 ucX, uint8 ucY, uint8 ucWidth, 
+                                 uint8 ucHeight);
+static bool displayDrawTriangle(uint8 ucX0, uint8 ucY0, uint8 ucX1, uint8 ucY1, 
+                                uint8 ucX2, uint8 ucY2);
+static bool displayDrawLine(uint8 ucX0, uint8 ucY0, uint8 ucX1, uint8 ucY1);
 
 //****************************.audioManagerTask.********************************
 // Purpose : Initialize display. 
@@ -180,8 +185,8 @@ bool displaySelectionMode(uint8 ucSelectedIndex, String* psSongList)
 // Return  : true
 // Notes   : None
 //******************************************************************************
-bool displayDrawTriangle(uint8 ucX0, uint8 ucY0, uint8 ucX1, uint8 ucY1, 
-                         uint8 ucX2, uint8 ucY2)
+static bool displayDrawTriangle(uint8 ucX0, uint8 ucY0, uint8 ucX1, uint8 ucY1, 
+                                uint8 ucX2, uint8 ucY2)
 {
   gcdisplay.fillTriangle(ucX0, ucY0, ucX1, ucY1, ucX2, ucY2, WHITE);
   gcdisplay.display();
@@ -199,7 +204,8 @@ bool displayDrawTriangle(uint8 ucX0, uint8 ucY0, uint8 ucX1, uint8 ucY1,
 // Return  : true
 // Notes   : None
 //******************************************************************************
-bool displayDrawRectangle(uint8 ucX, uint8 ucY, uint8 ucWidth, uint8 ucHeight)
+static bool displayDrawRectangle(uint8 ucX, uint8 ucY, uint8 ucWidth, 
+                                 uint8 ucHeight)
 {
   gcdisplay.fillRect(ucX, ucY, ucWidth, ucHeight, WHITE);
   gcdisplay.display();
@@ -217,7 +223,7 @@ bool displayDrawRectangle(uint8 ucX, uint8 ucY, uint8 ucWidth, uint8 ucHeight)
 // Return  : true
 // Notes   : None
 //******************************************************************************
-bool displayDrawLine(uint8 ucX0, uint8 ucY0, uint8 ucX1, uint8 ucY1)
+static bool displayDrawLine(uint8 ucX0, uint8 ucY0, uint8 ucX1, uint8 ucY1)
 {
   gcdisplay.drawLine(ucX0, ucY0, ucX1, ucY1, WHITE);
   gcdisplay.display();

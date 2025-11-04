@@ -66,16 +66,15 @@ bool audioDriverPlayRingtone(_CURRENT_DATA_* pstReceivedData,
     if ((NULL != pstReceivedData) && (NULL != ppMqAudio))
     {
         audioToSetup(pstReceivedData->psSongList, 
-                                 pstReceivedData->ucSelectedIndex);
+                     pstReceivedData->ucSelectedIndex);
         
         // Playback loop until mode changes or song finishes.
         while ((true == sgcAudio.isRunning()) && 
-                (PLAY_MODE == pstReceivedData->ucMode))
+               (PLAY_MODE == pstReceivedData->ucMode))
         {
             sgcAudio.loop();
 
-            if (true == rtosInitMqueueReceive(ppMqAudio,
-                                              &sstNewReceivedData))
+            if (true == rtosInitMqueueReceive(ppMqAudio, &sstNewReceivedData))
             {
                 // Pause button pressed, stop playback loop.
                 if (EVENT_SWITCH_ON == sstNewReceivedData.ucAction)
@@ -86,7 +85,7 @@ bool audioDriverPlayRingtone(_CURRENT_DATA_* pstReceivedData,
                 }
                 // next / previous track selection.
                 else if ((EVENT_LEFT == sstNewReceivedData.ucAction) || 
-                        (EVENT_RIGHT == sstNewReceivedData.ucAction))
+                         (EVENT_RIGHT == sstNewReceivedData.ucAction))
                 {
                     sgcAudio.stopSong();
                     pstReceivedData->ucMode = PAUSE_MODE;

@@ -98,7 +98,7 @@ static bool systemManagerLoadFiles(String* psSongList)
         File cRoot = SPIFFS.open("/");
         File cFile = cRoot.openNextFile();
 
-        while(cFile && ucIndex < NUM_AUDIO_FILE)
+        while(ucIndex < NUM_AUDIO_FILE)
         {
             psSongList[ucIndex] = cFile.name();
             cFile = cRoot.openNextFile();

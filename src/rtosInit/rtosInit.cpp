@@ -89,20 +89,14 @@ bool rtosInitAll()
     bool blReturn = false;
 
     do {
-        if (true != rtosInitSemaphore())
-        {
-            Serial.print("rtosInitSemaphore failed");
-        }
+        rtosInitSemaphore();
 
         if (true != rtosInitEvent(&sgstEventHandler.pEventHandler))
         {
             Serial.print("rtosInitEvent failed");
         }
 
-        if (true != rtosInitTask())
-        {
-            Serial.print("rtosInitTask failed");
-        }
+        rtosInitTask();
 
         blReturn = true;
     }while (true != blReturn);
