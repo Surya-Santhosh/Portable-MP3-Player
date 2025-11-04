@@ -1,0 +1,322 @@
+//***************************** freeRtosInit ***********************************
+// Copyright (c) 2025 Trenser Technology Solutions
+// All Rights Reserved
+//******************************************************************************
+// File    : freeRtosInit.cpp
+// Summary : Initialize all FreeRTOS resources (task, semaphore and 
+//           message queue).
+// Note    : None
+// Author  : Surya Santhosh
+// Day     : 23/Oct/2025
+//******************************************************************************
+
+//**************************** Include Files ***********************************
+#include "rtosInit.h"
+#include "audioManager.h"
+#include "inputManager.h"
+#include "systemManager.h"
+#include "displayManger.h"
+
+//******************************* Local Types **********************************
+
+//***************************** Local Constants ********************************
+static _RTOS_HANDLER_ sgstEventHandler = {0};
+static _TASK_ sgstTask[] = {{(TaskFunction_t) inputManagerTask, "Input Manager", 
+                        STACK_SIZE, &sgstEventHandler,  tskIDLE_PRIORITY, NULL}, 
+                        {(TaskFunction_t) audioManagerTask, "Audio Manager", 
+                        STACK_SIZE, &sgstEventHandler, tskIDLE_PRIORITY, NULL}, 
+                        {(TaskFunction_t) displayManagerTask, "Display Manager", 
+                        STACK_SIZE, &sgstEventHandler, tskIDLE_PRIORITY, NULL}, 
+                        {(TaskFunction_t) systemManagerTask, "System Manager", 
+                        STACK_SIZE, &sgstEventHandler, tskIDLE_PRIORITY, NULL}};
+
+//**************************** Local Variables *********************************
+
+//***************************** Local Functions ********************************
+static bool rtosInitTask();
+static bool rtosInitSemaphore();
+
+//**************************.rtosInitTask.**********************************
+// Purpose : To create FreeRTOS tasks. 
+// Inputs  : None
+// Outputs : None
+// Return  : true
+// Notes   : None
+//******************************************************************************
+static bool rtosInitTask()
+{
+    uint8 ucIndex = 0;
+
+    for (ucIndex = 0; ucIndex < TASK_COUNT; ucIndex++)
+    {
+        xTaskCreate(sgstTask[ucIndex].pvTaskName, sgstTask[ucIndex].pucName, 
+                    sgstTask[ucIndex].ulStackSize, 
+                    sgstTask[ucIndex].pvParameters, 
+                    sgstTask[ucIndex].unPriority, 
+                    sgstTask[ucIndex].pvTaskHandle);
+    }
+
+    return true;
+}
+
+//*************************.rtosInitSemaphore.******************************
+// Purpose : To create FreeRTOS binary Semaphore.
+// Inputs  : None
+// Outputs : None
+// Return  : true
+// Notes   : None
+//******************************************************************************
+static bool rtosInitSemaphore()
+{
+    uint8 ucIndex = 0;
+
+    sgstEventHandler.semDisplayManager = xSemaphoreCreateBinary();
+    sgstEventHandler.semAudioManager = xSemaphoreCreateBinary();
+    sgstEventHandler.semSystemManager = xSemaphoreCreateBinary();
+
+    return true;
+}
+
+//***************************.freeRtosInitMQueue.*******************************
+// Purpose : To create message queue. 
+// Inputs  : None
+// Outputs : None
+// Return  : true
+// Notes   : None
+//******************************************************************************
+
+//*****************************.rtosInitAll.********************************
+// Purpose : Initialize task and semaphore. 
+// Inputs  : None
+// Outputs : None
+// Return  : blReturn
+// Notes   : None
+//******************************************************************************
+bool rtosInitAll()
+{
+    bool blReturn = false;
+
+    do {
+        if (true != rtosInitSemaphore())
+        {
+            Serial.print("rtosInitSemaphore failed");
+        }
+
+        if (true != rtosInitEvent(&sgstEventHandler.pEventHandler))
+        {
+            Serial.print("rtosInitEvent failed");
+        }
+
+        if (true != rtosInitTask())
+        {
+            Serial.print("rtosInitTask failed");
+        }
+
+        blReturn = true;
+    }while (true != blReturn);
+
+    return blReturn;
+}
+
+//***************************.rtosInitSemRelease.*******************************
+// Purpose : To release a semaphore. 
+// Inputs  : psemHandler - pointer to semaphore handler.
+// Outputs : None
+// Return  : blReturn
+// Notes   : None
+//******************************************************************************
+bool rtosInitSemRelease(SemaphoreHandle_t* psemHandler)
+{
+    bool blReturn = false;
+
+    if(NULL != psemHandler)
+    {
+        if (pdTRUE == xSemaphoreGive(*psemHandler))
+        {
+            blReturn = true;
+        }
+    }
+
+    return blReturn;
+}
+
+//***************************.rtosInitSemAcquire.*******************************
+// Purpose : To acuire a semaphore. 
+// Inputs  : psemHandler - pointer to semaphore handler.
+// Outputs : None
+// Return  : blReturn
+// Notes   : None
+//******************************************************************************
+bool rtosInitSemAcquire(SemaphoreHandle_t* psemHandler)
+{
+    bool blReturn = false;
+
+    if(NULL != psemHandler)
+    {
+        if (pdTRUE == xSemaphoreTake(*psemHandler, portMAX_DELAY))
+        {
+            blReturn = true;
+        }
+    }
+
+    return blReturn;
+}
+
+//*************************.rtosInitMqueueReceive.**************************
+// Purpose : To Receive an item from a queue. 
+// Inputs  : ppMqAudio - pointer to Message queue handler.
+//         : pvBuffer - Pointer to the buffer into which the received item will
+//           be copied.
+// Outputs : None
+// Return  : blReturn
+// Notes   : None
+//******************************************************************************
+bool rtosInitMqueueReceive(QueueHandle_t* ppMqAudio, void* pvBuffer)
+{
+    bool blReturn = false;
+
+    if (NULL != ppMqAudio && NULL != pvBuffer)
+    {
+        if (pdTRUE == xQueueReceive(*ppMqAudio, pvBuffer, portTICK_PERIOD_MS))
+        {
+            blReturn = true;
+        }
+    }
+
+    return blReturn;
+}
+
+//*************************.rtosInitMqueueSend.*****************************
+// Purpose : To Receive an item from a queue. 
+// Inputs  : psemHandler - pointer to Message queue handler.
+//         : pvBuffer - A pointer to the item that is to be placed on the queue.
+// Outputs : None
+// Return  : blReturn
+// Notes   : None
+//******************************************************************************
+bool rtosInitMqueueSend(QueueHandle_t* ppMqAudio, void* pvBuffer)
+{
+    bool blReturn = false;
+
+    if (NULL != ppMqAudio && NULL != pvBuffer)
+    {
+        if (pdTRUE == xQueueSend(*ppMqAudio, pvBuffer, portTICK_PERIOD_MS))
+        {
+            blReturn = true;
+        }
+    }
+
+    return blReturn;
+}
+
+//****************************.rtosInitEvent.*******************************
+// Purpose : Create an event . 
+// Inputs  : ppEventHandler - pointer to event handler.
+// Outputs : None
+// Return  : blReturn
+// Notes   : None
+//******************************************************************************
+bool rtosInitEvent(EventGroupHandle_t* ppEventHandler)
+{
+    bool blReturn = false;
+
+    if (NULL != ppEventHandler)
+    {
+        *ppEventHandler = xEventGroupCreate();
+        blReturn = true;
+    }
+    else
+    {
+        Serial.print("rtosInitEvent failed");
+    }
+
+    return blReturn;
+}
+
+//***************************.rtosInitEventSet.*****************************
+// Purpose : Set bits within an event group. 
+// Inputs  : ppEventHandler - Pointer to event group in which the bits are to 
+//           be set.
+//         : EventBit - A bitwise value that indicates the bit or bits to set.
+// Outputs : None
+// Return  : blReturn
+// Notes   : None
+//******************************************************************************
+bool rtosInitEventSet(EventGroupHandle_t* ppEventHandler, EventBits_t eventBit)
+{
+    bool blReturn = false;
+    BaseType_t priority = pdFALSE;
+
+    if (NULL != ppEventHandler)
+    {
+        xEventGroupSetBits(*ppEventHandler, eventBit);
+
+        blReturn = true;
+    }
+    else
+    {
+        Serial.print("rtosInitEventSet failed");
+    }
+
+    return blReturn;
+}
+
+//*****************************.rtosInitEventWait.******************************
+// Purpose : Set bits within an event group. 
+// Inputs  : ppEventHandler - Pointer to event group in which the bits are to 
+//           be set.
+//         : pvBuffer - A bitwise value that indicates the bit or bits to set.
+// Outputs : None
+// Return  : blReturn
+// Notes   : None
+//******************************************************************************
+bool rtosInitEventWait(EventGroupHandle_t* ppEventHandler, 
+                       EventBits_t* pEventBit)
+{
+    bool blReturn = false;
+
+    if (NULL != ppEventHandler && NULL != pEventBit)
+    {
+        *pEventBit =  xEventGroupWaitBits(*ppEventHandler, EVENT_DOWN | 
+                                           EVENT_LEFT | EVENT_RIGHT | EVENT_UP | 
+                                           EVENT_SWITCH_ON, pdTRUE, pdFALSE, 
+                                           portMAX_DELAY);
+        blReturn = true;
+    }
+    else
+    {
+        Serial.print("rtosInitEventWait failed");
+    }
+
+    return blReturn;
+}
+
+
+//***************************.freeRtosInitMQueue.*******************************
+// Purpose : To create message queue. 
+// Inputs  : pMqHandle - pointer to message descriptor.
+//           unQueueLength - The number of items that the queue can contain.
+//           ucItemSize - The number of bytes each item in the queue.
+// Outputs : None
+// Return  : blReturn
+// Notes   : None
+//******************************************************************************
+bool freeRtosInitMQueue(QueueHandle_t* ppMqHandle, uint16 unQueueLength, 
+                        uint8 ucItemSize)
+{
+    bool blReturn = false;
+
+    if (NULL != ppMqHandle)
+    {
+        *ppMqHandle = xQueueCreate(unQueueLength, ucItemSize);
+        blReturn = true;
+    }
+    else
+    {
+        Serial.print("freeRtosInitMQueue failed");
+    }
+
+    return blReturn;
+}
+
+// EOF
