@@ -68,7 +68,7 @@ typedef struct _RTOS_HANDLER_
 #define JOYSTICK_MAX_VALUE               (3900)
 #define JOYSTICK_CENTER_VALUE            (1500)
 #define VOLUME_LEVEL                     (5)
-#define DELAY_TASK                       (100)
+#define DELAY_TASK                       (500)
 
 //************************* Global Variables *********************************** 
 

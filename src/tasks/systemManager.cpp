@@ -50,8 +50,7 @@ void systemManagerTask(_RTOS_HANDLER_* pstRtosHandler)
         while (1)
         {
             // Wait until joystick triggers an event.
-            rtosInitEventWait(&pstRtosHandler->pEventHandler, 
-                              &sEventBit);
+            rtosInitEventWait(&pstRtosHandler->pEventHandler, &sEventBit);
 
             //Store received action.
             sstCurrentData.ucAction = sEventBit;

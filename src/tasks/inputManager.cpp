@@ -40,7 +40,7 @@ void inputManagerTask(_RTOS_HANDLER_* pstRtosHandler)
                 Serial.println("joystickRead failed");
             }
 
-            vTaskDelay(500);
+            vTaskDelay(DELAY_TASK);
         }
     }
 }
