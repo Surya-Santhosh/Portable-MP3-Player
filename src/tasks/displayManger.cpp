@@ -34,7 +34,6 @@
 //******************************************************************************
 void displayManagerTask(_RTOS_HANDLER_* pstRtosHandler)
 {
-    uint8 ucIndex = 0;
     static _CURRENT_DATA_ sstReceivedData = {0};
 
     if (NULL != pstRtosHandler)
@@ -42,11 +41,8 @@ void displayManagerTask(_RTOS_HANDLER_* pstRtosHandler)
         while (1)
         {
             rtosInitSemAcquire(&pstRtosHandler->semDisplayManager);
-            if (true != rtosInitMqueueReceive(&pstRtosHandler->pMqDisplay, 
-                                              &sstReceivedData))
-            {
-              Serial.println(" dis xQueueReceive failed");
-            }
+            rtosInitMqueueReceive(&pstRtosHandler->pMqDisplay, 
+                                  &sstReceivedData);
 
             if (SELECTION_MODE == sstReceivedData.ucMode)
             {

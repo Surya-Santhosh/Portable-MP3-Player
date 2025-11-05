@@ -34,12 +34,12 @@ static bool joystickSetEvents(_JOYSTICK_DATA_* pstJoystickData,
 bool joystickRead(EventGroupHandle_t* ppEventHandler)
 {
     bool blReturn = false;
+    _JOYSTICK_DATA_ stJoystickData = {0};
     
     if (NULL != ppEventHandler)
     {
         pinMode(JOYSTICK_SWITCH, INPUT_PULLUP);
 
-        _JOYSTICK_DATA_ stJoystickData = {0};
         stJoystickData.ulXValue = analogRead(JOYSTICK_X);
         stJoystickData.ulYValue = analogRead(JOYSTICK_Y);
         stJoystickData.blSwitchState = digitalRead(JOYSTICK_SWITCH);

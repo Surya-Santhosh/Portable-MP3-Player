@@ -39,7 +39,6 @@ static bool systemManagerSelectMode(_CURRENT_DATA_* pstCurrentData);
 //******************************************************************************
 void systemManagerTask(_RTOS_HANDLER_* pstRtosHandler)
 {
-    uint8 ucIndex = 0;
     static _CURRENT_DATA_ sstCurrentData = {0};
     static EventBits_t sEventBit = 0;
 
@@ -91,6 +90,10 @@ void systemManagerTask(_RTOS_HANDLER_* pstRtosHandler)
 //******************************************************************************
 static bool systemManagerSelectMode(_CURRENT_DATA_* pstCurrentData)
 {
+    bool blReturn = false;
+
+    if (NULL != pstCurrentData)
+    {
         if (HOME_SCREEN == sgucSelectedMode)
         {
             systemManagerHomeScreen(pstCurrentData);
@@ -104,7 +107,10 @@ static bool systemManagerSelectMode(_CURRENT_DATA_* pstCurrentData)
             systemManagerPlayMode(pstCurrentData);
         }
 
-    return true;
+        blReturn = true;
+    }
+
+    return blReturn;
 }
 
 //**************************.systemManagerLoadFiles.****************************
@@ -122,17 +128,16 @@ static bool systemManagerLoadFiles(String* psSongList)
     if (NULL != psSongList)
     {
         File cRoot = SPIFFS.open("/");
-        File cFile = cRoot.openNextFile();
 
-        while(ucIndex < NUM_AUDIO_FILE)
+        while (ucIndex < NUM_AUDIO_FILE)
         {
+            File cFile = cRoot.openNextFile();
             psSongList[ucIndex] = cFile.name();
-            cFile = cRoot.openNextFile();
+            cFile.close();
             ucIndex++;
         }
 
         cRoot.close();
-        cFile.close();
         blReturn = true;
     }
     else
@@ -157,35 +162,42 @@ static bool systemManagerSelectionMode(_CURRENT_DATA_* pstCurrentData)
 
     if ((NULL != pstCurrentData))
     {
-        switch(pstCurrentData->ucAction)
+        switch (pstCurrentData->ucAction)
         {
             // Move up in list.
             case EVENT_RIGHT : 
-            case EVENT_UP : pstCurrentData->ucSelectedIndex--;
+            case EVENT_UP : 
+                {
+                    pstCurrentData->ucSelectedIndex--;
 
-                            if (NUM_AUDIO_FILE <= 
-                                                pstCurrentData->ucSelectedIndex)
-                            {
-                                pstCurrentData->ucSelectedIndex = 
-                                                             NUM_AUDIO_FILE - 1;
-                            }
-                            break;
+                    if (NUM_AUDIO_FILE <= pstCurrentData->ucSelectedIndex)
+                    {
+                        pstCurrentData->ucSelectedIndex = NUM_AUDIO_FILE - 1;
+                    }
+                }
+                break;
 
             // Move down in list.
-            case EVENT_DOWN : pstCurrentData->ucSelectedIndex++;
+            case EVENT_DOWN : 
+                {
+                    pstCurrentData->ucSelectedIndex++;
 
-                              if (NUM_AUDIO_FILE <= 
-                                                pstCurrentData->ucSelectedIndex)
-                              {
-                                pstCurrentData->ucSelectedIndex = 0;
-                              }
-                              break;
+                    if (NUM_AUDIO_FILE <= pstCurrentData->ucSelectedIndex)
+                    {
+                        pstCurrentData->ucSelectedIndex = 0;
+                    }
+                }
+                break;
 
             // To select play mode.
-            case EVENT_SWITCH_ON : sgucSelectedMode = PLAY_MODE;
-                                   break;
+            case EVENT_SWITCH_ON : 
+                {
+                    sgucSelectedMode = PLAY_MODE;
+                }
+                break;
 
-            default : sgucSelectedMode = HOME_SCREEN;
+            default : 
+                sgucSelectedMode = HOME_SCREEN;
         }
 
         blReturn = true;
@@ -208,7 +220,7 @@ static bool systemManagerHomeScreen(_CURRENT_DATA_* pstCurrentData)
 
     if ((NULL != pstCurrentData))
     {
-        if ( 0 != pstCurrentData->ucAction)
+        if (0 != pstCurrentData->ucAction)
         {
              sgucSelectedMode = SELECTION_MODE;
         }
@@ -233,48 +245,60 @@ static bool systemManagerPlayMode(_CURRENT_DATA_* pstCurrentData)
 
     if ((NULL != pstCurrentData))
     {
-        switch(pstCurrentData->ucAction)
+        switch (pstCurrentData->ucAction)
         {
             // Go back to file selection.
-            case EVENT_UP : sgucSelectedMode = SELECTION_MODE;
-                            break;
+            case EVENT_UP : 
+                {
+                    sgucSelectedMode = SELECTION_MODE;
+                }
+                break;
 
-            case EVENT_DOWN : sgucSelectedMode = SELECTION_MODE;
-                              break;
+            case EVENT_DOWN : 
+                {
+                    sgucSelectedMode = SELECTION_MODE;
+                }
+                break;
 
             // Next track.
-            case EVENT_RIGHT : pstCurrentData->ucSelectedIndex++;
-                               sgucSelectedMode = PLAY_MODE;
+            case EVENT_RIGHT : 
+                {
+                    pstCurrentData->ucSelectedIndex++;
+                    sgucSelectedMode = PLAY_MODE;
 
-                               if (NUM_AUDIO_FILE <= 
-                                               pstCurrentData->ucSelectedIndex)
-                               {
-                                pstCurrentData->ucSelectedIndex = 0;
-                               }
-                               break;
+                    if (NUM_AUDIO_FILE <= pstCurrentData->ucSelectedIndex)
+                    {
+                        pstCurrentData->ucSelectedIndex = 0;
+                    }
+                }
+                break;
             
             // Previous track.
-            case EVENT_LEFT : pstCurrentData->ucSelectedIndex--;
-                              sgucSelectedMode = PLAY_MODE;
+            case EVENT_LEFT : 
+                {
+                    pstCurrentData->ucSelectedIndex--;
+                    sgucSelectedMode = PLAY_MODE;
 
-                              if (NUM_AUDIO_FILE <= 
-                                               pstCurrentData->ucSelectedIndex)
-                              {
-                                pstCurrentData->ucSelectedIndex = 
-                                                             NUM_AUDIO_FILE - 1;
-                              }
-                              break;
+                    if (NUM_AUDIO_FILE <= pstCurrentData->ucSelectedIndex)
+                    {
+                        pstCurrentData->ucSelectedIndex = NUM_AUDIO_FILE - 1;
+                    }
+                }
+                break;
 
             // Toggle play/pause state.
-            case EVENT_SWITCH_ON : if (PLAY_MODE == sgucSelectedMode)
-                                   {
-                                    sgucSelectedMode = PAUSE_MODE;
-                                   }
-                                   else
-                                   {
-                                    sgucSelectedMode = PLAY_MODE;
-                                   }
-                                   break;
+            case EVENT_SWITCH_ON : 
+                {
+                    if (PLAY_MODE == sgucSelectedMode)
+                    {
+                        sgucSelectedMode = PAUSE_MODE;
+                    }
+                    else
+                    {
+                        sgucSelectedMode = PLAY_MODE;
+                    }
+                }
+                break;
         }
 
         blReturn = true;

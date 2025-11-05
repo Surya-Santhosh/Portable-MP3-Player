@@ -61,7 +61,7 @@ bool audioDriverPlayRingtone(_CURRENT_DATA_* pstReceivedData,
                              EventGroupHandle_t* ppEventHandler)
 {
     bool blReturn = false;
-    _CURRENT_DATA_ sstNewReceivedData = {0};
+    static _CURRENT_DATA_ sstNewReceivedData = {0};
 
     if ((NULL != pstReceivedData) && (NULL != ppMqAudio) && 
         (NULL != ppEventHandler))
@@ -92,7 +92,6 @@ bool audioDriverPlayRingtone(_CURRENT_DATA_* pstReceivedData,
             rtosInitEventSet(ppEventHandler, EVENT_RIGHT);
         }
 
-        pstReceivedData->ucMode = sstNewReceivedData.ucMode;
         pstReceivedData->ucSelectedIndex = sstNewReceivedData.ucSelectedIndex;
         blReturn = true;
     }

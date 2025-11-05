@@ -40,7 +40,6 @@ typedef struct _RTOS_HANDLER_
 
 //************************* Global Constants ***********************************
 #define UART_BAUD_RATE                   (115200)
-#define TASK_COUNT                       (4)
 #define STACK_SIZE                       (4000)
 #define EVENT_UP                         (1 << 0)
 #define EVENT_DOWN                       (1 << 1)
@@ -69,7 +68,7 @@ typedef struct _RTOS_HANDLER_
 #define JOYSTICK_MAX_VALUE               (3900)
 #define JOYSTICK_CENTER_VALUE            (1500)
 #define VOLUME_LEVEL                     (5)
-#define DELAY_TASK                       (10)
+#define DELAY_TASK                       (500)
 #define EVENT_WAIT_DELAY                 (1000)
 
 //************************* Global Variables *********************************** 

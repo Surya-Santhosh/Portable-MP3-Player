@@ -33,7 +33,6 @@
 //******************************************************************************
 void audioManagerTask(_RTOS_HANDLER_* pstRtosHandler)
 {
-    uint8 ucIndex = 0;
     static _CURRENT_DATA_ sstReceivedData = {0};
 
     if (NULL != pstRtosHandler)

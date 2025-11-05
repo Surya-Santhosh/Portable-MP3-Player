@@ -46,8 +46,9 @@ static bool rtosInitSemaphore();
 static bool rtosInitTask()
 {
     uint8 ucIndex = 0;
+    uint8 ucTaskCount = sizeof(sgstTask) / sizeof(sgstTask[0]);
 
-    for (ucIndex = 0; ucIndex < TASK_COUNT; ucIndex++)
+    for (ucIndex = 0; ucIndex < ucTaskCount; ucIndex++)
     {
         xTaskCreate(sgstTask[ucIndex].pvTaskName, sgstTask[ucIndex].pucName, 
                     sgstTask[ucIndex].ulStackSize, 
@@ -63,7 +64,7 @@ static bool rtosInitTask()
 // Purpose : To create FreeRTOS binary Semaphore.
 // Inputs  : None
 // Outputs : None
-// Return  : true
+// Return  : blReturn
 // Notes   : None
 //******************************************************************************
 static bool rtosInitSemaphore()
@@ -95,7 +96,8 @@ bool rtosInitAll()
 {
     bool blReturn = false;
 
-    do {
+    do 
+    {
         if (true != rtosInitSemaphore())
         {
             Serial.print("rtosInitSemaphore failed");
@@ -109,7 +111,8 @@ bool rtosInitAll()
         rtosInitTask();
 
         blReturn = true;
-    }while (true != blReturn);
+    }
+    while (true != blReturn);
 
     return blReturn;
 }
@@ -125,7 +128,7 @@ bool rtosInitSemRelease(SemaphoreHandle_t* psemHandler)
 {
     bool blReturn = false;
 
-    if(NULL != psemHandler)
+    if (NULL != psemHandler)
     {
         if (pdTRUE == xSemaphoreGive(*psemHandler))
         {
@@ -147,7 +150,7 @@ bool rtosInitSemAcquire(SemaphoreHandle_t* psemHandler)
 {
     bool blReturn = false;
 
-    if(NULL != psemHandler)
+    if (NULL != psemHandler)
     {
         if (pdTRUE == xSemaphoreTake(*psemHandler, portMAX_DELAY))
         {
@@ -171,9 +174,9 @@ bool rtosInitMqueueReceive(QueueHandle_t* ppMqAudio, void* pvBuffer)
 {
     bool blReturn = false;
 
-    if (NULL != ppMqAudio && NULL != pvBuffer)
+    if ((NULL != ppMqAudio) && (NULL != pvBuffer))
     {
-        if (pdTRUE == xQueueReceive(*ppMqAudio, pvBuffer, 0))
+        if (pdTRUE == xQueueReceive(*ppMqAudio, pvBuffer, portTICK_PERIOD_MS))
         {
             blReturn = true;
         }
@@ -194,7 +197,7 @@ bool rtosInitMqueueSend(QueueHandle_t* ppMqAudio, void* pvBuffer)
 {
     bool blReturn = false;
 
-    if (NULL != ppMqAudio && NULL != pvBuffer)
+    if ((NULL != ppMqAudio) && (NULL != pvBuffer))
     {
         if (pdTRUE == xQueueOverwrite(*ppMqAudio, pvBuffer))
         {

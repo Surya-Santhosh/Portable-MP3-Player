@@ -82,7 +82,6 @@ bool displayPlayMode(uint8 ucdMode, uint8 ucSelectedIndex, String* psSongList)
 
   if (NULL != psSongList)
   {
-
     gcdisplay.clearDisplay();
     gcdisplay.setCursor(0, 0);
 
