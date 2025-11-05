@@ -16,11 +16,6 @@
 #include <Adafruit_SSD1306.h>
 
 //**************************** Global Types ************************************
-typedef unsigned short uint16;
-typedef unsigned char uint8;
-typedef unsigned long uint32;
-typedef char int8;
-typedef signed short int16;
 
 //************************* Global Constants ***********************************
 
@@ -30,6 +25,7 @@ typedef signed short int16;
 bool displayInit();
 bool displayPlayMode(uint8 ucdMode, uint8 ucSelectedIndex, String* psSongList);
 bool displaySelectionMode(uint8 sgucSelectedIndex, String* psSongList);
+bool displayHomeScreen();
 
 //************************ Inline Method Implementations *********************** 
 

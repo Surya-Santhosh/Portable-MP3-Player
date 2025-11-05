@@ -38,7 +38,7 @@ bool rtosInitEvent(EventGroupHandle_t* ppEventHandler);
 bool rtosInitEventSet(EventGroupHandle_t* ppEventHandler, 
                       EventBits_t eventBit);
 bool rtosInitEventWait(EventGroupHandle_t* ppEventHandler, 
-                       EventBits_t* eventBit);
+                       EventBits_t* eventBit, TickType_t ticksToWait);
 bool freeRtosInitMQueue(QueueHandle_t* ppMqHandle, uint16 unQueueLength, 
                         uint8 ucItemSize);
 

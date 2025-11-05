@@ -24,7 +24,7 @@
 static bool joystickSetEvents(_JOYSTICK_DATA_* pstJoystickData, 
                               EventGroupHandle_t* ppEventHandler);
 
-//****************************.joystickSetEvents.*******************************
+//*******************************.joystickRead.*********************************
 // Purpose : Read joystick input, set events. 
 // Inputs  : ppEventHandler - poniter to event handler.
 // Outputs : None
@@ -73,30 +73,25 @@ static bool joystickSetEvents(_JOYSTICK_DATA_* pstJoystickData,
         if ((JOYSTICK_MAX_VALUE < pstJoystickData->ulYValue) && 
             (JOYSTICK_CENTER_VALUE < pstJoystickData->ulXValue))
         {
-            Serial.println("Right");
             rtosInitEventSet(ppEventHandler, EVENT_RIGHT);
         }
         else if ((JOYSTICK_MIN_VALUE > pstJoystickData->ulYValue) && 
                 (JOYSTICK_CENTER_VALUE < pstJoystickData->ulXValue))
         {
-            Serial.println("Left");
             rtosInitEventSet(ppEventHandler, EVENT_LEFT);
         }
         else if ((JOYSTICK_CENTER_VALUE < pstJoystickData->ulYValue) && 
                 (JOYSTICK_MAX_VALUE < pstJoystickData->ulXValue))
         {
-            Serial.println("Up");
             rtosInitEventSet(ppEventHandler, EVENT_UP);
         }
         else if ((JOYSTICK_CENTER_VALUE < pstJoystickData->ulYValue) && 
                 (JOYSTICK_MIN_VALUE > pstJoystickData->ulXValue))
         {
-            Serial.println("Down");
             rtosInitEventSet(ppEventHandler, EVENT_DOWN);
         }
         else if (LOW == pstJoystickData->blSwitchState)
         {
-            Serial.println("Switch on");
             rtosInitEventSet(ppEventHandler, EVENT_SWITCH_ON);
         }
 

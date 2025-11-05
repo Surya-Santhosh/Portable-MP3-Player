@@ -47,9 +47,10 @@ typedef struct _RTOS_HANDLER_
 #define EVENT_RIGHT                      (1 << 2)
 #define EVENT_LEFT                       (1 << 3)
 #define EVENT_SWITCH_ON                  (1 << 4)
-#define SELECTION_MODE                   (0x01)
-#define PLAY_MODE                        (0x02)
-#define PAUSE_MODE                       (0x03)
+#define HOME_SCREEN                      (0x01)
+#define SELECTION_MODE                   (0x02)
+#define PLAY_MODE                        (0x03)
+#define PAUSE_MODE                       (0x04)
 #define JOYSTICK_SWITCH                  (5)
 #define JOYSTICK_X                       (34)
 #define JOYSTICK_Y                       (35)
@@ -68,7 +69,8 @@ typedef struct _RTOS_HANDLER_
 #define JOYSTICK_MAX_VALUE               (3900)
 #define JOYSTICK_CENTER_VALUE            (1500)
 #define VOLUME_LEVEL                     (5)
-#define DELAY_TASK                       (100)
+#define DELAY_TASK                       (10)
+#define EVENT_WAIT_DELAY                 (1000)
 
 //************************* Global Variables *********************************** 
 

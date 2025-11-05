@@ -23,7 +23,7 @@
 
 //***************************** Local Functions ********************************
 
-//*****************************.taskAudioManager.*******************************
+//*****************************.audioManagerTask.*******************************
 // Purpose : Receives data from system manger via message queue and 
 //           control audio playback.
 // Inputs  : pstRtosHandler - pointer to the freeRTOS handlers.
@@ -43,7 +43,8 @@ void audioManagerTask(_RTOS_HANDLER_* pstRtosHandler)
             rtosInitSemAcquire(&pstRtosHandler->semAudioManager);
             rtosInitMqueueReceive(&pstRtosHandler->pMqAudio, &sstReceivedData);
 
-            if (SELECTION_MODE != sstReceivedData.ucMode)
+            if ((PLAY_MODE == sstReceivedData.ucMode) || 
+                (PAUSE_MODE == sstReceivedData.ucMode))
             {
                 audioDriverPlayRingtone(&sstReceivedData,
                                         &pstRtosHandler->pMqAudio, 

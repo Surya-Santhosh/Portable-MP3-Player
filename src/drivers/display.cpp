@@ -27,7 +27,7 @@ static bool displayDrawTriangle(uint8 ucX0, uint8 ucY0, uint8 ucX1, uint8 ucY1,
                                 uint8 ucX2, uint8 ucY2);
 static bool displayDrawLine(uint8 ucX0, uint8 ucY0, uint8 ucX1, uint8 ucY1);
 
-//****************************.audioManagerTask.********************************
+//*******************************.displayInit.**********************************
 // Purpose : Initialize display. 
 // Inputs  : None
 // Outputs : None
@@ -44,12 +44,26 @@ bool displayInit()
     gcdisplay.clearDisplay();
     gcdisplay.setTextSize(1);
     gcdisplay.setTextColor(WHITE);
-    gcdisplay.setCursor(7, 16);
-
-    gcdisplay.println("Portable MP3 Player");
-    gcdisplay.display();
+    displayHomeScreen();
 
     return true;
+}
+
+//****************************.displayHomeScreen.*******************************
+// Purpose : Display home screen. 
+// Inputs  : None
+// Outputs : None
+// Return  : true
+// Notes   : None
+//******************************************************************************
+bool displayHomeScreen()
+{
+  gcdisplay.clearDisplay();
+  gcdisplay.setCursor(7, 16);
+  gcdisplay.println("Portable MP3 Player");
+  gcdisplay.display();
+
+  return true;
 }
 
 //***************************.displayPlayMode.**********************************

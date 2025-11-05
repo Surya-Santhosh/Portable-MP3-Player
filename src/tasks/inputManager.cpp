@@ -21,7 +21,7 @@
 
 //***************************** Local Functions ********************************
 
-//****************************.taskAudioManager.********************************
+//****************************.inputManagerTask.********************************
 // Purpose : Read joystick input, set events and update system manager via event 
 // Inputs  : pstRtosHandler - pointer to the freeRTOS handlers.
 // Outputs : None

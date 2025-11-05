@@ -59,7 +59,7 @@ static bool rtosInitTask()
     return true;
 }
 
-//*************************.rtosInitSemaphore.******************************
+//****************************.rtosInitSemaphore.*******************************
 // Purpose : To create FreeRTOS binary Semaphore.
 // Inputs  : None
 // Outputs : None
@@ -68,13 +68,20 @@ static bool rtosInitTask()
 //******************************************************************************
 static bool rtosInitSemaphore()
 {
-    uint8 ucIndex = 0;
+    bool blReturn = false;
 
     sgstEventHandler.semDisplayManager = xSemaphoreCreateBinary();
     sgstEventHandler.semAudioManager = xSemaphoreCreateBinary();
     sgstEventHandler.semSystemManager = xSemaphoreCreateBinary();
 
-    return true;
+    if ((NULL != sgstEventHandler.semDisplayManager) && 
+        (NULL != sgstEventHandler.semAudioManager) && 
+        (NULL != sgstEventHandler.semSystemManager))
+    {
+        blReturn = true;
+    }
+
+    return blReturn;
 }
 
 //*******************************.rtosInitAll.**********************************
@@ -89,7 +96,10 @@ bool rtosInitAll()
     bool blReturn = false;
 
     do {
-        rtosInitSemaphore();
+        if (true != rtosInitSemaphore())
+        {
+            Serial.print("rtosInitSemaphore failed");
+        }
 
         if (true != rtosInitEvent(&sgstEventHandler.pEventHandler))
         {
@@ -163,7 +173,7 @@ bool rtosInitMqueueReceive(QueueHandle_t* ppMqAudio, void* pvBuffer)
 
     if (NULL != ppMqAudio && NULL != pvBuffer)
     {
-        if (pdTRUE == xQueueReceive(*ppMqAudio, pvBuffer, portTICK_PERIOD_MS))
+        if (pdTRUE == xQueueReceive(*ppMqAudio, pvBuffer, 0))
         {
             blReturn = true;
         }
@@ -172,7 +182,7 @@ bool rtosInitMqueueReceive(QueueHandle_t* ppMqAudio, void* pvBuffer)
     return blReturn;
 }
 
-//*************************.rtosInitMqueueSend.*****************************
+//***************************.rtosInitMqueueSend.*******************************
 // Purpose : To Receive an item from a queue. 
 // Inputs  : psemHandler - pointer to Message queue handler.
 //         : pvBuffer - A pointer to the item that is to be placed on the queue.
@@ -186,7 +196,7 @@ bool rtosInitMqueueSend(QueueHandle_t* ppMqAudio, void* pvBuffer)
 
     if (NULL != ppMqAudio && NULL != pvBuffer)
     {
-        if (pdTRUE == xQueueSend(*ppMqAudio, pvBuffer, portTICK_PERIOD_MS))
+        if (pdTRUE == xQueueOverwrite(*ppMqAudio, pvBuffer))
         {
             blReturn = true;
         }
@@ -210,10 +220,6 @@ bool rtosInitEvent(EventGroupHandle_t* ppEventHandler)
     {
         *ppEventHandler = xEventGroupCreate();
         blReturn = true;
-    }
-    else
-    {
-        Serial.print("rtosInitEvent failed");
     }
 
     return blReturn;
@@ -239,10 +245,6 @@ bool rtosInitEventSet(EventGroupHandle_t* ppEventHandler, EventBits_t eventBit)
 
         blReturn = true;
     }
-    else
-    {
-        Serial.print("rtosInitEventSet failed");
-    }
 
     return blReturn;
 }
@@ -257,7 +259,7 @@ bool rtosInitEventSet(EventGroupHandle_t* ppEventHandler, EventBits_t eventBit)
 // Notes   : None
 //******************************************************************************
 bool rtosInitEventWait(EventGroupHandle_t* ppEventHandler, 
-                       EventBits_t* pEventBit)
+                       EventBits_t* pEventBit, TickType_t ticksToWait)
 {
     bool blReturn = false;
 
@@ -266,12 +268,8 @@ bool rtosInitEventWait(EventGroupHandle_t* ppEventHandler,
         *pEventBit =  xEventGroupWaitBits(*ppEventHandler, EVENT_DOWN | 
                                            EVENT_LEFT | EVENT_RIGHT | EVENT_UP | 
                                            EVENT_SWITCH_ON, pdTRUE, pdFALSE, 
-                                           portMAX_DELAY);
+                                           ticksToWait);
         blReturn = true;
-    }
-    else
-    {
-        Serial.print("rtosInitEventWait failed");
     }
 
     return blReturn;
@@ -296,10 +294,6 @@ bool freeRtosInitMQueue(QueueHandle_t* ppMqHandle, uint16 unQueueLength,
     {
         *ppMqHandle = xQueueCreate(unQueueLength, ucItemSize);
         blReturn = true;
-    }
-    else
-    {
-        Serial.print("freeRtosInitMQueue failed");
     }
 
     return blReturn;

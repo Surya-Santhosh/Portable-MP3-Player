@@ -25,7 +25,7 @@ static Audio sgcAudio;
 //***************************** Local Functions ********************************
 static bool audioToSetup(String* psSongList, uint8 ucIndex);
 
-//****************************.audioManagerTask.********************************
+//*****************************.audioDriverInit.********************************
 // Purpose : Read joystick input and send to the system manager. 
 // Inputs  : None
 // Outputs : None
@@ -47,7 +47,7 @@ bool audioDriverInit()
     return blReturn;
 }
 
-//****************************.audioManagerTask.********************************
+//*************************.audioDriverPlayRingtone.****************************
 // Purpose : Read joystick input and send to the system manager. 
 // Inputs  : pstReceivedData - Pointer to the struct of received data.
 //           ppMqAudio - Ponter to the message queue handler.
@@ -63,7 +63,8 @@ bool audioDriverPlayRingtone(_CURRENT_DATA_* pstReceivedData,
     bool blReturn = false;
     _CURRENT_DATA_ sstNewReceivedData = {0};
 
-    if ((NULL != pstReceivedData) && (NULL != ppMqAudio))
+    if ((NULL != pstReceivedData) && (NULL != ppMqAudio) && 
+        (NULL != ppEventHandler))
     {
         audioToSetup(pstReceivedData->psSongList, 
                      pstReceivedData->ucSelectedIndex);
@@ -76,16 +77,7 @@ bool audioDriverPlayRingtone(_CURRENT_DATA_* pstReceivedData,
 
             if (true == rtosInitMqueueReceive(ppMqAudio, &sstNewReceivedData))
             {
-                // Pause button pressed, stop playback loop.
-                if (EVENT_SWITCH_ON == sstNewReceivedData.ucAction)
-                {
-                    sgcAudio.stopSong();
-                    pstReceivedData->ucMode = PAUSE_MODE;
-                    break;
-                }
-                // next / previous track selection.
-                else if ((EVENT_LEFT == sstNewReceivedData.ucAction) || 
-                         (EVENT_RIGHT == sstNewReceivedData.ucAction))
+                if (0 != sstNewReceivedData.ucAction)
                 {
                     sgcAudio.stopSong();
                     pstReceivedData->ucMode = PAUSE_MODE;
@@ -104,15 +96,11 @@ bool audioDriverPlayRingtone(_CURRENT_DATA_* pstReceivedData,
         pstReceivedData->ucSelectedIndex = sstNewReceivedData.ucSelectedIndex;
         blReturn = true;
     }
-    else
-    {
-        Serial.println("audioDriverplayRingtone failed");
-    }
 
     return blReturn;
 }
 
-//****************************.audioManagerTask.********************************
+//******************************.audioToSetup.**********************************
 // Purpose : Read joystick input and send to the system manager. 
 // Inputs  : pSongList - pointer to an array of string.
 //           ucIndex - Index of current selected song.

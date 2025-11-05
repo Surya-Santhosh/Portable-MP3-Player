@@ -42,14 +42,21 @@ void displayManagerTask(_RTOS_HANDLER_* pstRtosHandler)
         while (1)
         {
             rtosInitSemAcquire(&pstRtosHandler->semDisplayManager);
-            rtosInitMqueueReceive(&pstRtosHandler->pMqDisplay, 
-                                  &sstReceivedData);
+            if (true != rtosInitMqueueReceive(&pstRtosHandler->pMqDisplay, 
+                                              &sstReceivedData))
+            {
+              Serial.println(" dis xQueueReceive failed");
+            }
 
             if (SELECTION_MODE == sstReceivedData.ucMode)
             {
                 // Display folder and song selection UI.
                 displaySelectionMode(sstReceivedData.ucSelectedIndex, 
                                      sstReceivedData.psSongList);
+            }
+            else if (HOME_SCREEN == sstReceivedData.ucMode)
+            {
+                displayHomeScreen();
             }
             else 
             {
