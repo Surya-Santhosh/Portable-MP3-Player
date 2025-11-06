@@ -58,7 +58,7 @@ bool joystickRead(EventGroupHandle_t* ppEventHandler)
 //***************************.joystickSetEvents.********************************
 // Purpose : Read joystick input and send to the system manager. 
 // Inputs  : pstJoystickData - poniter to struct contain joystick data.
-//           ppEventHandler - poniter to event handler.
+//         : ppEventHandler - poniter to event handler.
 // Outputs : None
 // Return  : blReturn
 // Notes   : None
@@ -76,17 +76,17 @@ static bool joystickSetEvents(_JOYSTICK_DATA_* pstJoystickData,
             rtosInitEventSet(ppEventHandler, EVENT_RIGHT);
         }
         else if ((JOYSTICK_MIN_VALUE > pstJoystickData->ulYValue) && 
-                (JOYSTICK_CENTER_VALUE < pstJoystickData->ulXValue))
+                 (JOYSTICK_CENTER_VALUE < pstJoystickData->ulXValue))
         {
             rtosInitEventSet(ppEventHandler, EVENT_LEFT);
         }
         else if ((JOYSTICK_CENTER_VALUE < pstJoystickData->ulYValue) && 
-                (JOYSTICK_MAX_VALUE < pstJoystickData->ulXValue))
+                 (JOYSTICK_MAX_VALUE < pstJoystickData->ulXValue))
         {
             rtosInitEventSet(ppEventHandler, EVENT_UP);
         }
         else if ((JOYSTICK_CENTER_VALUE < pstJoystickData->ulYValue) && 
-                (JOYSTICK_MIN_VALUE > pstJoystickData->ulXValue))
+                 (JOYSTICK_MIN_VALUE > pstJoystickData->ulXValue))
         {
             rtosInitEventSet(ppEventHandler, EVENT_DOWN);
         }

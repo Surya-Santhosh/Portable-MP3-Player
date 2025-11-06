@@ -266,7 +266,7 @@ bool rtosInitEventWait(EventGroupHandle_t* ppEventHandler,
 {
     bool blReturn = false;
 
-    if (NULL != ppEventHandler && NULL != pEventBit)
+    if ((NULL != ppEventHandler) && (NULL != pEventBit))
     {
         *pEventBit =  xEventGroupWaitBits(*ppEventHandler, EVENT_DOWN | 
                                            EVENT_LEFT | EVENT_RIGHT | EVENT_UP | 

@@ -42,8 +42,7 @@ void audioManagerTask(_RTOS_HANDLER_* pstRtosHandler)
             rtosInitSemAcquire(&pstRtosHandler->semAudioManager);
             rtosInitMqueueReceive(&pstRtosHandler->pMqAudio, &sstReceivedData);
 
-            if ((PLAY_MODE == sstReceivedData.ucMode) || 
-                (PAUSE_MODE == sstReceivedData.ucMode))
+            if ((PLAY_MODE == sstReceivedData.ucMode))
             {
                 audioDriverPlayRingtone(&sstReceivedData,
                                         &pstRtosHandler->pMqAudio, 

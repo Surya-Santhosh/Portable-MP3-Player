@@ -17,7 +17,7 @@
 typedef struct _TASK_
 {
     TaskFunction_t pvTaskName;
-    const char *pucName;  
+    const char* pucName;  
     uint32 ulStackSize;
     void* pvParameters;
     UBaseType_t unPriority;
@@ -35,8 +35,7 @@ bool rtosInitSemAcquire(SemaphoreHandle_t* psemHandler);
 bool rtosInitMqueueReceive(QueueHandle_t* ppMqAudio, void* pvBuffer);
 bool rtosInitMqueueSend(QueueHandle_t* ppMqAudio, void* pvBuffer);
 bool rtosInitEvent(EventGroupHandle_t* ppEventHandler);
-bool rtosInitEventSet(EventGroupHandle_t* ppEventHandler, 
-                      EventBits_t eventBit);
+bool rtosInitEventSet(EventGroupHandle_t* ppEventHandler, EventBits_t eventBit);
 bool rtosInitEventWait(EventGroupHandle_t* ppEventHandler, 
                        EventBits_t* eventBit, TickType_t ticksToWait);
 bool freeRtosInitMQueue(QueueHandle_t* ppMqHandle, uint16 unQueueLength, 

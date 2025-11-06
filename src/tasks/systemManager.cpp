@@ -24,8 +24,8 @@ static uint8 sgucSelectedMode = HOME_SCREEN;
 
 //***************************** Local Functions ********************************
 static bool systemManagerLoadFiles(String* psSongList);
-static bool systemManagerPlayMode(_CURRENT_DATA_ *sstCurrentData);
-static bool systemManagerSelectionMode(_CURRENT_DATA_ *sstCurrentData);
+static bool systemManagerPlayMode(_CURRENT_DATA_ *pstCurrentData);
+static bool systemManagerSelectionMode(_CURRENT_DATA_ *pstCurrentData);
 static bool systemManagerHomeScreen(_CURRENT_DATA_* pstCurrentData);
 static bool systemManagerSelectMode(_CURRENT_DATA_* pstCurrentData);
 
@@ -160,7 +160,7 @@ static bool systemManagerSelectionMode(_CURRENT_DATA_* pstCurrentData)
 {
     bool blReturn = false;
 
-    if ((NULL != pstCurrentData))
+    if (NULL != pstCurrentData)
     {
         switch (pstCurrentData->ucAction)
         {
@@ -218,7 +218,7 @@ static bool systemManagerHomeScreen(_CURRENT_DATA_* pstCurrentData)
 {
     bool blReturn = false;
 
-    if ((NULL != pstCurrentData))
+    if (NULL != pstCurrentData)
     {
         if (0 != pstCurrentData->ucAction)
         {
@@ -243,7 +243,7 @@ static bool systemManagerPlayMode(_CURRENT_DATA_* pstCurrentData)
 {
     bool blReturn = false;
 
-    if ((NULL != pstCurrentData))
+    if (NULL != pstCurrentData)
     {
         switch (pstCurrentData->ucAction)
         {
