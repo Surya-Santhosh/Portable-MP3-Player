@@ -24,8 +24,8 @@ static uint8 sgucSelectedMode = HOME_SCREEN;
 
 //***************************** Local Functions ********************************
 static bool systemManagerLoadFiles(String* psSongList);
-static bool systemManagerPlayMode(_CURRENT_DATA_ *pstCurrentData);
-static bool systemManagerSelectionMode(_CURRENT_DATA_ *pstCurrentData);
+static bool systemManagerPlayMode(_CURRENT_DATA_* pstCurrentData);
+static bool systemManagerSelectionMode(_CURRENT_DATA_* pstCurrentData);
 static bool systemManagerHomeScreen(_CURRENT_DATA_* pstCurrentData);
 static bool systemManagerSelectMode(_CURRENT_DATA_* pstCurrentData);
 
@@ -41,9 +41,6 @@ void systemManagerTask(_RTOS_HANDLER_* pstRtosHandler)
 {
     static _CURRENT_DATA_ sstCurrentData = {0};
     static EventBits_t sEventBit = 0;
-
-    freeRtosInitMQueue(&pstRtosHandler->pMqAudio, 1, sizeof(_CURRENT_DATA_));
-    freeRtosInitMQueue(&pstRtosHandler->pMqDisplay, 1, sizeof(_CURRENT_DATA_));
 
     if (NULL != pstRtosHandler)
     {
@@ -73,9 +70,7 @@ void systemManagerTask(_RTOS_HANDLER_* pstRtosHandler)
 
             // Send updated data to Audio & Display.
             rtosInitMqueueSend(&pstRtosHandler->pMqAudio, &sstCurrentData);
-            rtosInitSemRelease(&pstRtosHandler->semAudioManager);
             rtosInitMqueueSend(&pstRtosHandler->pMqDisplay, &sstCurrentData);
-            rtosInitSemRelease(&pstRtosHandler->semDisplayManager);
         }
     }
 }

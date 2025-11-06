@@ -50,8 +50,8 @@ bool audioDriverInit()
 //*************************.audioDriverPlayRingtone.****************************
 // Purpose : Read joystick input and send to the system manager. 
 // Inputs  : pstReceivedData - Pointer to the struct of received data.
-//           ppMqAudio - Ponter to the message queue handler.
-//           ppEventHandler - Ponter to the event handler.
+//         : ppMqAudio - Ponter to the message queue handler.
+//         : ppEventHandler - Ponter to the event handler.
 // Outputs : None
 // Return  : blReturn
 // Notes   : None
@@ -102,7 +102,7 @@ bool audioDriverPlayRingtone(_CURRENT_DATA_* pstReceivedData,
 //******************************.audioToSetup.**********************************
 // Purpose : Read joystick input and send to the system manager. 
 // Inputs  : pSongList - pointer to an array of string.
-//           ucIndex - Index of current selected song.
+//         : ucIndex - Index of current selected song.
 // Outputs : None
 // Return  : blReturn
 // Notes   : None

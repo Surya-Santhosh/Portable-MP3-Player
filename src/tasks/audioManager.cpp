@@ -35,11 +35,12 @@ void audioManagerTask(_RTOS_HANDLER_* pstRtosHandler)
 {
     static _CURRENT_DATA_ sstReceivedData = {0};
 
+    freeRtosInitMQueue(&pstRtosHandler->pMqAudio, 1, sizeof(_CURRENT_DATA_));
+
     if (NULL != pstRtosHandler)
     {
         while (1)
         {
-            rtosInitSemAcquire(&pstRtosHandler->semAudioManager);
             rtosInitMqueueReceive(&pstRtosHandler->pMqAudio, &sstReceivedData);
 
             if ((PLAY_MODE == sstReceivedData.ucMode))

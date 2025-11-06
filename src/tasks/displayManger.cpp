@@ -35,12 +35,13 @@
 void displayManagerTask(_RTOS_HANDLER_* pstRtosHandler)
 {
     static _CURRENT_DATA_ sstReceivedData = {0};
+    
+    freeRtosInitMQueue(&pstRtosHandler->pMqDisplay, 1, sizeof(_CURRENT_DATA_));
 
     if (NULL != pstRtosHandler)
     {
         while (1)
         {
-            rtosInitSemAcquire(&pstRtosHandler->semDisplayManager);
             rtosInitMqueueReceive(&pstRtosHandler->pMqDisplay, 
                                   &sstReceivedData);
 

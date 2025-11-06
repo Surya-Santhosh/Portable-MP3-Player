@@ -145,7 +145,7 @@ bool displayPlayMode(uint8 ucdMode, uint8 ucSelectedIndex, String* psSongList)
 //**************************.displaySelectionMode.******************************
 // Purpose : Display the selection mode screen.
 // Inputs  : ucSelectedIndex - Selected index.
-//           psSongList - pointer to the songlist.
+//         : psSongList - pointer to the songlist.
 // Outputs : none
 // Return  : blReturn
 // Notes   : None

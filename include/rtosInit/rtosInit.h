@@ -30,8 +30,6 @@ typedef struct _TASK_
 
 //************************* Forward Declarations ******************************* 
 bool rtosInitAll();
-bool rtosInitSemRelease(SemaphoreHandle_t* psemHandler);
-bool rtosInitSemAcquire(SemaphoreHandle_t* psemHandler);
 bool rtosInitMqueueReceive(QueueHandle_t* ppMqAudio, void* pvBuffer);
 bool rtosInitMqueueSend(QueueHandle_t* ppMqAudio, void* pvBuffer);
 bool rtosInitEvent(EventGroupHandle_t* ppEventHandler);

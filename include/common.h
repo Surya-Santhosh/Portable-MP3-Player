@@ -30,9 +30,6 @@ typedef signed short int16;
 
 typedef struct _RTOS_HANDLER_
 {
-    SemaphoreHandle_t semDisplayManager;
-    SemaphoreHandle_t semAudioManager;
-    SemaphoreHandle_t semSystemManager;
     EventGroupHandle_t pEventHandler;
     QueueHandle_t pMqAudio;
     QueueHandle_t pMqDisplay;

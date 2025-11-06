@@ -34,7 +34,6 @@ static _TASK_ sgstTask[] = {{(TaskFunction_t) inputManagerTask, "Input Manager",
 
 //***************************** Local Functions ********************************
 static bool rtosInitTask();
-static bool rtosInitSemaphore();
 
 //**************************.rtosInitTask.**********************************
 // Purpose : To create FreeRTOS tasks. 
@@ -60,31 +59,6 @@ static bool rtosInitTask()
     return true;
 }
 
-//****************************.rtosInitSemaphore.*******************************
-// Purpose : To create FreeRTOS binary Semaphore.
-// Inputs  : None
-// Outputs : None
-// Return  : blReturn
-// Notes   : None
-//******************************************************************************
-static bool rtosInitSemaphore()
-{
-    bool blReturn = false;
-
-    sgstEventHandler.semDisplayManager = xSemaphoreCreateBinary();
-    sgstEventHandler.semAudioManager = xSemaphoreCreateBinary();
-    sgstEventHandler.semSystemManager = xSemaphoreCreateBinary();
-
-    if ((NULL != sgstEventHandler.semDisplayManager) && 
-        (NULL != sgstEventHandler.semAudioManager) && 
-        (NULL != sgstEventHandler.semSystemManager))
-    {
-        blReturn = true;
-    }
-
-    return blReturn;
-}
-
 //*******************************.rtosInitAll.**********************************
 // Purpose : Initialize task and semaphore. 
 // Inputs  : None
@@ -98,11 +72,6 @@ bool rtosInitAll()
 
     do 
     {
-        if (true != rtosInitSemaphore())
-        {
-            Serial.print("rtosInitSemaphore failed");
-        }
-
         if (true != rtosInitEvent(&sgstEventHandler.pEventHandler))
         {
             Serial.print("rtosInitEvent failed");
@@ -113,50 +82,6 @@ bool rtosInitAll()
         blReturn = true;
     }
     while (true != blReturn);
-
-    return blReturn;
-}
-
-//***************************.rtosInitSemRelease.*******************************
-// Purpose : To release a semaphore. 
-// Inputs  : psemHandler - pointer to semaphore handler.
-// Outputs : None
-// Return  : blReturn
-// Notes   : None
-//******************************************************************************
-bool rtosInitSemRelease(SemaphoreHandle_t* psemHandler)
-{
-    bool blReturn = false;
-
-    if (NULL != psemHandler)
-    {
-        if (pdTRUE == xSemaphoreGive(*psemHandler))
-        {
-            blReturn = true;
-        }
-    }
-
-    return blReturn;
-}
-
-//***************************.rtosInitSemAcquire.*******************************
-// Purpose : To acuire a semaphore. 
-// Inputs  : psemHandler - pointer to semaphore handler.
-// Outputs : None
-// Return  : blReturn
-// Notes   : None
-//******************************************************************************
-bool rtosInitSemAcquire(SemaphoreHandle_t* psemHandler)
-{
-    bool blReturn = false;
-
-    if (NULL != psemHandler)
-    {
-        if (pdTRUE == xSemaphoreTake(*psemHandler, portMAX_DELAY))
-        {
-            blReturn = true;
-        }
-    }
 
     return blReturn;
 }
